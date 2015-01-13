@@ -1,0 +1,10 @@
+#!/bin/bash
+
+function minify {
+    minifyjs -m --level=1 -i $1/$1.js > .js-cache/$1.min.js
+}
+
+echo Building JS..
+minify submit_event
+minify index
+minify about

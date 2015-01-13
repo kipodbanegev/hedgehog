@@ -52,3 +52,7 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Cache
+.sass-cache
+.js-cache

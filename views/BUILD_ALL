@@ -1,0 +1,4 @@
+#!/bin/bash
+./BUILD_SCSS
+./BUILD_JS
+./BUILD_HTML

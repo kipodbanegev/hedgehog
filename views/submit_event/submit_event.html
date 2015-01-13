@@ -1,0 +1,173 @@
+## -*- coding: utf-8 -*-
+## submit_event.html
+<%inherit file="../base.html"/>
+
+<%block name="var">
+{% set active_page = "submit_event" %}
+</%block>
+
+<%block name="end">
+</%block>
+
+<%block name="js"><%include file="../.js-cache/submit_event.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/submit_event/submit_event.css"/></%block>
+
+## Text input
+<%def name="textinput(label, id, name, placeholder, help='', more='')">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="textinput">${label}</label>
+        <div class="col-md-4">
+	    <input id="${id}" name="${name}" type="text" placeholder="${placeholder}" class="form-control input-md" ${more}>
+	    <span class="help-block">${help}</span>
+	</div>
+    </div>
+</%def>
+
+<div class="container">
+<form id="eventForm" class="form-horizontal">
+    <fieldset>
+	<legend>טופס הזנת אירוע</legend>
+
+	${textinput(label=u'שם האירוע', id='event_name', name='event_name', placeholder=u'שם האירוע', more='autofocus')}
+
+        <div class="form-group">
+	    <label class="col-md-4 control-label" for="textinput">מיקום האירוע</label>
+    	    <div class="col-md-4">
+		<input id="event_place" type="text" name="event_place" list="event_place_list" class="form-control input-md"/>
+	        <datalist id="event_place_list">
+		    <option value='מתנ"ס דימונה'>מתנ"ס דימונה</option>
+		</datalist>
+		<span class="help-block"></span>
+	    </div>
+	</div>
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="textinput">תאריך האירוע</label>
+    	    <div class="col-md-4">
+        	<input type='text' class="form-control" id='event_date' name='event_date'/>
+            </div>
+        </div>
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="textinput">שעת התחלה</label>
+    	    <div class="col-md-4">
+        	<input type='text' class="form-control" id='event_time' name='event_time'/>
+            </div>
+        </div>
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="textinput">שעת סיום</label>
+    	    <div class="col-md-4">
+        	<input type='text' class="form-control" id='event_time_end' name='event_time_end'/>
+            </div>
+        </div>
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="textinput">תיאור האירוע</label>
+    	    <div class="col-md-4">
+		<textarea class="form-control" rows="3"></textarea>
+            </div>
+        </div>
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="sel1">סוג האירוע:</label>
+	    <div class="col-md-4">
+		<select class="form-control" id="sel1">
+	    	    <option>הופעות</option>
+	    	    <option>סרטים</option>
+	            <option>הרצאות</option>
+	            <option>חוגים</option>
+	            <option>ספורט</option>
+	    	    <option>יצירה</option>
+	            <option>פסטיבלים</option>
+	            <option>חיי לילה</option>
+	            <option>תרבות יהודית</option>
+	            <option>התנדבות</option>
+	        </select>
+	    </div>
+	</div>
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="textinput">מתאים לגילאים</label>
+	    <div class="col-md-4">
+		<div class="checkbox">
+		    <label>
+    			<input type="checkbox" value=""> פעוטות
+    		    </label>
+		</div>
+		<div class="checkbox">
+		    <label>
+    			<input type="checkbox" value=""> ילדים
+    		    </label>
+		</div>
+		<div class="checkbox">
+		    <label>
+    			<input type="checkbox" value=""> נוער
+    		    </label>
+		</div>
+		<div class="checkbox">
+		    <label>
+    			<input type="checkbox" value=""> צעירים
+    		    </label>
+		</div>
+		<div class="checkbox">
+		    <label>
+    			<input type="checkbox" value=""> בוגרים
+    		    </label>
+		</div>
+		<div class="checkbox">
+		    <label>
+    			<input type="checkbox" value=""> גיל הזהב
+    		    </label>
+		</div>
+		<div class="checkbox">
+		    <label>
+    			<input type="checkbox" value=""> לכל המשפחה
+    		    </label>
+		</div>
+	    </div>
+	</div>
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="sel1">מגדר:</label>
+	    <div class="col-md-4">
+		<select class="form-control" id="sel1">
+	    	    <option>כולם</option>
+	    	    <option>נשים</option>
+	            <option>גברים</option>
+	        </select>
+	    </div>
+	</div>
+
+	${textinput(label=u'לינק לאירוע בפייסבוק',
+	    id='event_facebook_event_link',
+	    name='event_facebook_event_link',
+	    placeholder=u'http://facebook.com/event/...')}
+
+	${textinput(label=u'לינק לאתר חיצוני',
+	    id='event_link',
+	    name='event_link',
+	    placeholder=u'http://example.com/event')}
+
+	${textinput(label=u'לינק לסרטון',
+	    id='event_video',
+	    name='event_video',
+	    placeholder=u'http://youtube.com/url')}
+
+	${textinput(label=u'מחיר כניסה/השתתפות (אם יש)',
+	    id='event_video',
+	    name='event_video',
+	    placeholder=u'0')}
+
+
+	## Submit button
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="singlebutton"></label>
+	    <div class="col-md-4">
+    		<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">הבא</button>
+    	    </div>
+        </div>
+
+    </fieldset>
+</form>
+</div>
