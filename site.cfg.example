@@ -1,0 +1,5 @@
+[Database]
+host=localhost
+user=[user]
+password=[passwprd]
+dbname=[dbname]

@@ -56,3 +56,6 @@ target/
 # Cache
 .sass-cache
 .js-cache
+
+# site Config
+site.cfg
