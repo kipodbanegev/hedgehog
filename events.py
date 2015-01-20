@@ -1,31 +1,13 @@
-class event:
-    # event name as string
-    name = ""
-    # event place as string
-    place = ""
-    # date in datetime
-    date  = None
-    # original representation of the date in unicode
-    datestr = ""
+from pony.orm import *
 
-import psycopg2
-
-conn = None
-cur = None
+db = Database()
 
 def connect(host, user, password, dbname):
-    try:
-	global conn, cur
-	conn = psycopg2.connect("dbname='"+dbname+"' user='"+user+"' host='"+host+"' password='"+password+"'")
-	cur = conn.cursor()
-    except:
-        print "I am unable to connect to the database"
+    db.bind("postgres", host=host, user=user, password=password, database=dbname)
+    sql_debug(True)
+    db.generate_mapping(create_tables=True)
 
-def disconnect():
-    cur.close()
-    conn.close()
-
-def insert(e):
-    cur.execute("""INSERT INTO events (event_name) VALUES ('%s');""" % e.name)
-    # Make the changes to the database persistent
-    conn.commit()
+class Event(db.Entity):
+    id = PrimaryKey(int, auto=True)
+    name = Required(str)
+    authorized = Required(bool, default=False)

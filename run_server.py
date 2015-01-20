@@ -12,6 +12,9 @@ import jinja2
 # ConfigParser
 import ConfigParser, os
 
+# Pony
+from pony.orm import *
+
 # local events managment library
 import events
 
@@ -31,12 +34,13 @@ def submit_event():
     if request.method == 'GET':
     	return render_template('submit_event.min.html')
     if request.method == 'POST':
-	e = events.event
-	e.name    = request.form['event_name']
-	e.place   = request.form['event_place']
-	e.datestr    = request.form['event_date']
-	e.date    = datetime.strptime(request.form['event_date'], '%d/%m/%Y %H:%M')
-	events.insert(e)
+	name    = request.form['event_name']
+	with db_session:
+	    e = events.Event(name = name)	
+	    commit()
+	#e.place   = request.form['event_place']
+	#e.datestr    = request.form['event_date']
+	#e.date    = datetime.strptime(request.form['event_date'], '%d/%m/%Y %H:%M')
 	return '<html><body>thank you! <strong style="color:red;">' + str(e.name) + '</strong> had been added and waiting for approval. click <a href="/">here</a> to return to the kipod site.</body></html>'
 
 # main
@@ -62,4 +66,3 @@ if __name__ == "__main__":
     app.debug = True
     # start server
     app.run(host='0.0.0.0')
-    events.disconnect()
