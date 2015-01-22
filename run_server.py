@@ -11,9 +11,21 @@ import jinja2
 
 # ConfigParser
 import ConfigParser, os
+# load config file
+config = ConfigParser.ConfigParser()
+config.read('site.cfg')
+dbhost = config.get('Database', 'host', 0)
+dbuser = config.get('Database', 'user', 0)
+dbpass = config.get('Database', 'password', 0)
+dbname = config.get('Database', 'dbname', 0)
 
 # local events managment library
-import events
+import model
+from model import events, users
+model.connect(app, dbhost, dbuser, dbpass, dbname)
+
+# pony
+from pony.orm import *
 
 # home view
 @app.route("/")
@@ -40,15 +52,6 @@ def submit_event():
 
 # main
 if __name__ == "__main__":
-    # load config file
-    config = ConfigParser.ConfigParser()
-    config.read('site.cfg')
-    dbhost = config.get('Database', 'host', 0)
-    dbuser = config.get('Database', 'user', 0)
-    dbpass = config.get('Database', 'password', 0)
-    dbname = config.get('Database', 'dbname', 0)
-    events.connect(dbhost, dbuser, dbpass, dbname)
-
     hhfolder = os.path.dirname(os.path.abspath(__file__))
     # Custom jinja2 folder (Default - templates)
     my_loader = jinja2.ChoiceLoader([
