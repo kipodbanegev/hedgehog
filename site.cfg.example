@@ -1,5 +1,11 @@
 [Database]
 host=localhost
-user=[user]
-password=[passwprd]
-dbname=[dbname]
+user=someuser
+password=somepassword
+dbname=yourdatabasename
+
+[Session]
+secret_key='why would I tell you my secret key?'
+# best to generate using:
+# import os
+# os.urandom(24)

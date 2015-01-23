@@ -1,3 +1,4 @@
+from flask.ext.login import LoginManager
 from datetime import datetime
 from model import *
 
@@ -15,5 +16,22 @@ class User(db.Entity, UserMixin):
     confirmed_at = Required(datetime, default=lambda: datetime.now())
     roles = Set(Role)
 
+# Flask-Login
+login_manager = LoginManager()
+# Flas-Security
 user_datastore = PonyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
+
+def init(app):
+    # Flask-Login
+    login_manager.init_app(app)
+
+def create(email, password):
+    with db_session:
+	user_datastore.create_user(email=email, password=password)
+	commit()
+
+@login_manager.user_loader
+def load_user(userid):
+    with db_session:
+	return User.get(id=userid)

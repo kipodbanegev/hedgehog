@@ -6,5 +6,7 @@ function minify {
 
 echo Building JS..
 minify submit_event
+minify user_create
+minify login
 minify index
 minify about

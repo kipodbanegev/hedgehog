@@ -3,9 +3,8 @@
 
 {% set navigation_bar = [
     ('/', 'index', 'דף הבית'),
-    ('/event/submit', 'submit_event', 'הוספת אירוע')
+    ('/event/submit/', 'submit_event', 'הוספת אירוע'),
 ] -%}
-
 <nav>
     <ul class="nav nav-pills pull-right">
     {% for href, id, caption in navigation_bar %}
@@ -15,6 +14,16 @@
 	    <li><a href="{{ href|e }}">{{ caption|e }}</a></li>
 	{% endif %}
     {% endfor %}
+    {% if current_user.is_authenticated() %}
+	<li><a href="/logout">התנתקות</a></li>
+    {% else %}
+	{% if 'login' == active_page %}
+	<li class="active">
+	{% else %}
+	<li>
+	{% endif %}
+	<a href="/login">התחברות</a></li>
+    {% endif %}
     </ul>
 </nav>
 <h1 class="text-muted"><a href="/"><img src="/static/img/logo.png"></a></h1>

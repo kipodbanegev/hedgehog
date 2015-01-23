@@ -1,0 +1,52 @@
+## -*- coding: utf-8 -*-
+## submit_event.html
+<%inherit file="../base.html"/>
+
+<%block name="var">
+{% set active_page = "login" %}
+</%block>
+
+<%block name="end">
+</%block>
+
+<%block name="js"><%include file="../.js-cache/login.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/login/login.css"/></%block>
+
+## Text input
+<%def name="textinput(label, id, name, placeholder, help='', more='', type='text', value='')">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="textinput">${label}</label>
+        <div class="col-md-4">
+	    <input id="${id}" name="${name}" type="${type}" placeholder="${placeholder}" value="${value}" class="form-control input-md" ${more}>
+	    <span class="help-block">${help}</span>
+	</div>
+    </div>
+</%def>
+
+<div class="container">
+
+<form id="login_form" class="form-horizontal" method="post">
+    <fieldset>
+	<legend>התחברות לקיפו"ד</legend>
+
+	${textinput(label=u'כתובת דוא"ל', id='email', name='email', placeholder=u'שם משתמש', more='autofocus')}
+	${textinput(label=u'ססמה', id='password', name='password', placeholder=u'ססמה', type='password')}
+
+	${textinput(label=u'', id='next', name='next', placeholder=u'', type='hidden', value='{{ next }}')}
+
+	{% autoescape false %}
+	<div class="form-error col-md-12">{{ error }}</div>
+	{% endautoescape %}
+
+	## Submit button
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="singlebutton"></label>
+	    <div class="col-md-4">
+    		<button type="submit" id="singlebutton" name="singlebutton" class="btn btn-primary">הבא</button>
+    	    </div>
+        </div>
+
+    </fieldset>
+</form>
+<blockquote>אין לך עדיין משתמש באתר? <a href="/user/create">הרשמה לאתר..</a></blockquote>
+</div>

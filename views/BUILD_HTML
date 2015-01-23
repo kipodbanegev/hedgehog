@@ -23,8 +23,11 @@ def process(name):
     file.close()
 
 process('submit_event')
+process('user_create')
 process('index')
 process('about')
+process('404')
+process('login')
 
 EOF
 
