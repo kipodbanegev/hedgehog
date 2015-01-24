@@ -14,6 +14,9 @@
 	    <li><a href="{{ href|e }}">{{ caption|e }}</a></li>
 	{% endif %}
     {% endfor %}
+    {% if current_user.has_role('admin') %}
+	<li><a href="/admin">ניהול</a></li>
+    {% endif %}
     {% if current_user.is_authenticated() %}
 	<li><a href="/logout">התנתקות</a></li>
     {% else %}
@@ -24,6 +27,7 @@
 	{% endif %}
 	<a href="/login">התחברות</a></li>
     {% endif %}
+
     </ul>
 </nav>
 <h1 class="text-muted"><a href="/"><img src="/static/img/logo.png"></a></h1>

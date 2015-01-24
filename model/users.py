@@ -2,36 +2,41 @@ from flask.ext.login import LoginManager
 from datetime import datetime
 from model import *
 
-class Role(db.Entity, RoleMixin):
-    id = PrimaryKey(int, auto=True)
-    name = Required(str, 80, unique=True)
-    description = Optional(str, 255)
-    users = Set("User")
+# Define models
+roles_users = db.Table('roles_users',
+    db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer(), db.ForeignKey('role.id')))
 
-class User(db.Entity, UserMixin):
-    id = PrimaryKey(int, auto=True)
-    email = Required(str, 255, unique=True)
-    password = Required(str, 255)
-    active = Required(bool, default=False)
-    confirmed_at = Required(datetime, default=lambda: datetime.now())
-    roles = Set(Role)
+class Role(db.Model, RoleMixin):
+    id = db.Column(db.Integer(), primary_key=True)
+    name = db.Column(db.String(80), unique=True)
+    description = db.Column(db.String(255))
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(255), unique=True)
+    password = db.Column(db.String(255))
+    active = db.Column(db.Boolean())
+    confirmed_at = db.Column(db.DateTime())
+    roles = db.relationship('Role', secondary=roles_users,
+        backref=db.backref('users', lazy='dynamic'))
 
 # Flask-Login
-login_manager = LoginManager()
+#login_manager = LoginManager()
 # Flas-Security
-user_datastore = PonyUserDatastore(db, User, Role)
+user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
 
 def init(app):
+    pass
     # Flask-Login
-    login_manager.init_app(app)
+    #login_manager.init_app(app)
+    #login_manager.user_loader(load_user)
 
 def create(email, password):
-    with db_session:
-	user_datastore.create_user(email=email, password=password)
-	commit()
+    user_datastore.create_user(email=email, password=password)
+    db.session.commit()
 
-@login_manager.user_loader
-def load_user(userid):
-    with db_session:
-	return User.get(id=userid)
+#@login_manager.user_loader
+#def load_user(userid):
+#    return User.query.filter_by(id=userid).first()

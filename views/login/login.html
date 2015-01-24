@@ -23,16 +23,56 @@
     </div>
 </%def>
 
+{% macro render_field_with_errors(field) %}
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="textinput">{{ field.label }}</label>
+        <div class="col-md-4">
+    	    {{ field(**kwargs)|safe }}
+	    <input class="form-control input-md" ${more}>
+	    <span class="help-block">
+	    {% if field.errors %}
+    		<ul>
+		    {% for error in field.errors %}
+	    		<li>{{ error }}</li>
+		    {% endfor %}
+    		</ul>
+	    {% endif %}
+	    </span>
+	</div>
+    </div>
+{% endmacro %}
+
+{% macro render_field(field) %}
+  <p>{{ field(**kwargs)|safe }}</p>
+{% endmacro %}
+
 <div class="container">
 
-<form id="login_form" class="form-horizontal" method="post">
+<form id="login_form" class="form-horizontal" method="post" name="login_user_form">
+
     <fieldset>
 	<legend>התחברות לקיפו"ד</legend>
+
+        {{ login_user_form.hidden_tag() }}
+        {{ render_field_with_errors(login_user_form.email) }}
+        {{ render_field_with_errors(login_user_form.password) }}
+        {{ render_field_with_errors(login_user_form.remember) }}
+        {{ render_field(login_user_form.next) }}
+	{{ render_field(login_user_form.submit) }}
 
 	${textinput(label=u'כתובת דוא"ל', id='email', name='email', placeholder=u'שם משתמש', more='autofocus')}
 	${textinput(label=u'ססמה', id='password', name='password', placeholder=u'ססמה', type='password')}
 
 	${textinput(label=u'', id='next', name='next', placeholder=u'', type='hidden', value='{{ next }}')}
+
+	<div class="form-group">
+	    <label class="col-md-4 control-label" for="checkboxes">זכור אותי</label>
+	    <div class="col-md-4">
+    		<div class="checkbox">
+        	    <label for="remember"><input type="checkbox" name="remember" id="remember" value="0">זכור אותי</label>
+                </div>
+            </div>
+        </div>
 
 	{% autoescape false %}
 	<div class="form-error col-md-12">{{ error }}</div>

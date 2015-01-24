@@ -1,14 +1,14 @@
-from pony.orm import *
-from flask.ext.security import Security, PonyUserDatastore, \
+from flask.ext.sqlalchemy import SQLAlchemy
+from flask.ext.security import Security, SQLAlchemyUserDatastore, \
     UserMixin, RoleMixin, login_required
 
+db = SQLAlchemy()
 app = None
 
-db = Database()
+def init():
+    db.init_app(app)
 
-def connect(a, host, user, password, dbname):
-    app = a
-    db.bind("postgres", host=host, user=user, password=password, database=dbname)
-    #sql_debug(True)
-    db.generate_mapping(create_tables=True)
-
+def create_db():
+    with app.app_context():
+	db.create_all()
+	db.session.commit()

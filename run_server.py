@@ -20,24 +20,33 @@ dbuser = config.get('Database', 'user', 0)
 dbpass = config.get('Database', 'password', 0)
 dbname = config.get('Database', 'dbname', 0)
 secret_key = config.get('Session', 'secret_key', '')
+
+# set secret key for session
 if secret_key=='':
     sys.exit("Empty secrey_key in site.cfg")
-app.secret_key = secret_key
+# directly into flask-login
+#app.secret_key = secret_key
+# through flask-security
+app.config['SECRET_KEY'] = secret_key
 
-# local events managment library
+# connect to db
+connstr = 'postgresql://{0}:{1}@{2}/{3}'.format(dbuser, dbpass, dbhost, dbname)
+app.config['DEBUG'] = True
+app.config['SQLALCHEMY_DATABASE_URI'] = connstr
+app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'login.min.html'
+# loading db and model
 import model
+model.app = app
+model.init()
 from model import events, users
-
-# pony
-from pony.orm import *
+model.create_db()
+users.init(app)
 
 # Flask-Login
 from flask.ext.login import LoginManager, login_user, logout_user
-model.connect(app, dbhost, dbuser, dbpass, dbname)
-
 # Flask-Security
 from flask.ext.security import Security, current_user, login_required
-users.init(app)
+
 
 # Flask-WTF
 from flask_wtf import Form
@@ -88,21 +97,20 @@ def user_create():
     if request.method == 'POST':
 	email    = request.form['email']
 	password    = request.form['password']
-	with db_session:
-	    # check if user exist
-	    user = users.User.get(email=email)
-	    if not user is None:
-		url = url_for("login")
-		next = request.args.get("next") or ''
-		if next!='':
-		    url = url + u"?next="+next
-		error = u"כתובת דואר אלקטרוני זו כבר בשימוש. <a href='"+url+u"'>התחבר</a>"
-	        return render_template('user_create.min.html', error=error)
-	    # create user and fetch it
-	    users.create(email, password)
-	    user = users.User.get(email=email)
-    	    # login and validate the user...
-    	    login_user(user)
+	# check if user exist
+	user = users.User.query.filter_by(email=email).first()
+	if not user is None:
+	    url = url_for("login")
+	    next = request.args.get("next") or ''
+	    if next!='':
+	        url = url + u"?next="+next
+	    error = u"כתובת דואר אלקטרוני זו כבר בשימוש. <a href='"+url+u"'>התחבר</a>"
+	    return render_template('user_create.min.html', error=error)
+	# create user and fetch it
+	users.create(email, password)
+	user = users.User.query.filter_by(email=email).first()
+    	# login and validate the user...
+    	login_user(user)
         return redirect(request.args.get("next") or url_for("home"))
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -131,7 +139,6 @@ def logout():
 
 # Submit event view
 #@users.login_manager.user_loader
-@db_session
 @app.route("/event/submit/", methods=['GET', 'POST'])
 def submit_event():
     if request.method == 'GET':
