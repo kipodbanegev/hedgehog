@@ -34,6 +34,8 @@ connstr = 'postgresql://{0}:{1}@{2}/{3}'.format(dbuser, dbpass, dbhost, dbname)
 app.config['DEBUG'] = True
 app.config['SQLALCHEMY_DATABASE_URI'] = connstr
 app.config['SECURITY_LOGIN_USER_TEMPLATE'] = 'login.min.html'
+app.config['SECURITY_MSG_USER_DOES_NOT_EXIST'] = (u"אין חשבון משוייך לכתובת דואר אלקטרוני זו", 'error')
+app.config['SECURITY_MSG_INVALID_PASSWORD'] = (u"כתובת דואר אלקטרוני וססמה אינם תואמים", 'error')
 # loading db and model
 import model
 model.app = app

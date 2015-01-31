@@ -23,12 +23,22 @@
     </div>
 </%def>
 
-{% macro render_field_with_errors(field) %}
+{% macro render_errors(field, text) %}
+    <span class="help-block">
+    {% if field.errors %}
+	<ul>
+	    {% for error in field.errors %}
+    		<li>{{ error }}</li>
+	    {% endfor %}
+	</ul>
+    {% endif %}
+{% endmacro %}
+
+{% macro render_field_with_errors(field, text) %}
     <div class="form-group">
-        <label class="col-md-4 control-label" for="textinput">{{ field.label }}</label>
+        {{ field.label(class="col-md-4 control-label") }}
         <div class="col-md-4">
-    	    {{ field(**kwargs)|safe }}
-	    <input class="form-control input-md" ${more}>
+    	    {{ field(class="form-control input-md", placeholder=text, **kwargs)|safe }}
 	    <span class="help-block">
 	    {% if field.errors %}
     		<ul>
@@ -54,15 +64,18 @@
 	<legend>התחברות לקיפו"ד</legend>
 
         {{ login_user_form.hidden_tag() }}
-        {{ render_field_with_errors(login_user_form.email) }}
-        {{ render_field_with_errors(login_user_form.password) }}
-        {{ render_field_with_errors(login_user_form.remember) }}
+	<%doc>
+        {{ render_field_with_errors(login_user_form.email, 'כתובת דוא"ל') }}
+        {{ render_field_with_errors(login_user_form.password, 'ססמה') }}
+        {{ render_field_with_errors(login_user_form.remember, 'זכור אותי') }}
         {{ render_field(login_user_form.next) }}
 	{{ render_field(login_user_form.submit) }}
+	</%doc>
 
 	${textinput(label=u'כתובת דוא"ל', id='email', name='email', placeholder=u'שם משתמש', more='autofocus')}
+        {{ render_errors(login_user_form.email) }}
 	${textinput(label=u'ססמה', id='password', name='password', placeholder=u'ססמה', type='password')}
-
+        {{ render_errors(login_user_form.password) }}
 	${textinput(label=u'', id='next', name='next', placeholder=u'', type='hidden', value='{{ next }}')}
 
 	<div class="form-group">
@@ -73,6 +86,7 @@
                 </div>
             </div>
         </div>
+        {{ render_errors(login_user_form.remember) }}
 
 	{% autoescape false %}
 	<div class="form-error col-md-12">{{ error }}</div>
