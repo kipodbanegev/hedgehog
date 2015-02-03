@@ -1,0 +1,20 @@
+## -*- coding: utf-8 -*-
+## about.html
+
+<%inherit file="../base.html"/>
+
+<%block name="var">{% set active_page = "about" %}</%block>
+<%block name="js"><%include file="../.js-cache/about.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/about/about.css"/></%block>
+
+<h1>ניהול הקיפו"ד</h1>
+
+<h2>משתמשים</h2>
+
+<ul>
+    {% for user in users %}
+    <li>
+	{{ user.email }}
+    </li>
+    {% endfor %}
+</ul>

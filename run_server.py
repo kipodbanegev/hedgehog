@@ -60,6 +60,12 @@ from wtforms.validators import Required
 def home():
     return render_template('index.min.html', active='home')
 
+# admin view
+@app.route("/admin")
+def admin_home():
+    return render_template('admin.min.html', active='home', users=users.User.query.filter_by())
+
+
 # About view
 @app.route("/about")
 def about():

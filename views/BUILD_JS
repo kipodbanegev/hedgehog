@@ -8,5 +8,6 @@ echo Building JS..
 minify submit_event
 minify user_create
 minify login
+minify admin
 minify index
 minify about
