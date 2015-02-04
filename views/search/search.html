@@ -1,0 +1,12 @@
+## -*- coding: utf-8 -*-
+## search.html
+
+<%inherit file="../base.html"/>
+
+<%block name="var">{% set active_page = "search" %}</%block>
+<%block name="js"><%include file="../.js-cache/search.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/search/search.css"/></%block>
+
+<row>
+    <%include file="../events_table.html"/>
+</row>

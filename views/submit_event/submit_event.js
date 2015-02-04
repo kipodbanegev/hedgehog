@@ -15,10 +15,9 @@ var validator = {
     },
     fields: {
         event_name: notempty,
+        event_description: notempty,
         event_place: notempty,
         event_date: notempty,
-        event_time: notempty,
-        event_time_end: notempty
     }
 }
 

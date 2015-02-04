@@ -18,3 +18,13 @@
     </li>
     {% endfor %}
 </ul>
+
+<h2>אירועים</h2>
+
+<ul>
+    {% for e in events %}
+    <li>
+	<a href="/event/{{e.id}}">{{ e.name }}</a>
+    </li>
+    {% endfor %}
+</ul>

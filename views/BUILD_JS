@@ -9,5 +9,7 @@ minify submit_event
 minify user_create
 minify login
 minify admin
+minify event
+minify search
 minify index
 minify about

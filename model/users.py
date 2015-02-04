@@ -21,22 +21,13 @@ class User(db.Model, UserMixin):
     roles = db.relationship('Role', secondary=roles_users,
         backref=db.backref('users', lazy='dynamic'))
 
-# Flask-Login
-#login_manager = LoginManager()
-# Flas-Security
+# Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)
 security = Security(app, user_datastore)
 
 def init(app):
     pass
-    # Flask-Login
-    #login_manager.init_app(app)
-    #login_manager.user_loader(load_user)
 
 def create(email, password):
     user_datastore.create_user(email=email, password=password)
     db.session.commit()
-
-#@login_manager.user_loader
-#def load_user(userid):
-#    return User.query.filter_by(id=userid).first()

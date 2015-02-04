@@ -1,0 +1,13 @@
+## -*- coding: utf-8 -*-
+## event.html
+
+<%inherit file="../base.html"/>
+
+<%block name="var">{% set active_page = "event" %}</%block>
+<%block name="js"><%include file="../.js-cache/event.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/event/event.css"/></%block>
+
+<h1>{{ event.name }}</h1>
+<h2>{{ event.description }}</h2>
+<p>תאריך האירוע: <a href="/search/events/date/{{ event.date.strftime('%Y/%m/%d/') }}">{{ event.date.strftime('%d/%m/%Y') }}</a> {{ event.date.strftime('%H:%M') }}</p>
+<p>מקום האירוע: <a href="/search/events/place/{{ event.place }}">{{ event.place }}</a></p>

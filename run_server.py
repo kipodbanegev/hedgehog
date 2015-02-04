@@ -58,12 +58,15 @@ from wtforms.validators import Required
 # home view
 @app.route("/")
 def home():
-    return render_template('index.min.html', active='home')
+    e = events.Event.query.filter_by()
+    return render_template('index.min.html', active='home', events=e)
 
 # admin view
 @app.route("/admin")
 def admin_home():
-    return render_template('admin.min.html', active='home', users=users.User.query.filter_by())
+    u = users.User.query.filter_by()
+    e = events.Event.query.filter_by()
+    return render_template('admin.min.html', active='home', users=u, events=e)
 
 
 # About view
@@ -145,6 +148,27 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+# event view
+@app.route("/event/<id>")
+def event(id):
+    e = events.Event.query.filter_by(id=id).first()
+    return render_template('event.min.html', active='event', event=e)
+
+# search events view
+@app.route("/search/events/date/<year>/<month>/<day>/")
+def search_events_by_date(year, month, day):
+    s = datetime(int(year), int(month), int(day), 0, 0)
+    e = datetime(int(year), int(month), int(day), 23, 59)
+    e = events.Event.query.filter(events.Event.date.between(s, e))
+    return render_template('search.min.html', active='search', events=e)
+
+# search events view
+@app.route("/search/events/place/<place>")
+def search_events_by_place(place):
+    e = events.Event.query.filter_by(place=place)
+    return render_template('search.min.html', active='search', events=e)
+
+
 # Submit event view
 #@users.login_manager.user_loader
 @app.route("/event/submit/", methods=['GET', 'POST'])
@@ -154,8 +178,11 @@ def submit_event():
 	    return redirect(url_for('user_create')+"?next="+url_for('submit_event'))
     	return render_template('submit_event.min.html')
     if request.method == 'POST':
-	name    = request.form['event_name']
-	events.insert(name)
+	name        = request.form['event_name']
+	description = request.form['event_description']
+	place = request.form['event_place']
+	date = request.form['event_date']
+	events.insert(name, description, place, date)
 	#e.place   = request.form['event_place']
 	#e.datestr    = request.form['event_date']
 	#e.date    = datetime.strptime(request.form['event_date'], '%d/%m/%Y %H:%M')
