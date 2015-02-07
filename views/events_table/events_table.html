@@ -18,16 +18,16 @@
 </form>
 </br>
 
-<form>
+<form class="events_table">
     <legend>האירועים הקרובים | <a target="_blank" href="http://he.wikipedia.org/wiki/23_%D7%91%D7%93%D7%A6%D7%9E%D7%91%D7%A8">היום בהיסטוריה</a></legend>
     <div class="btn-group" role="group" aria-label="...">
-	<button type="button" class="btn btn-default" aria-label="Left Align">
+    	<button id="table_view" type="button" class="btn btn-default active" aria-label="Left Align">
     	    <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
         </button>
-        <button type="button" class="btn btn-default" aria-label="Left Align">
+        <button id="icons_view" type="button" class="btn btn-default" aria-label="Left Align">
     	    <span class="glyphicon glyphicon-th" aria-hidden="true"></span>
         </button>
-        <button type="button" class="btn btn-default" aria-label="Left Align">
+        <button id="big_icons_view" type="button" class="btn btn-default" aria-label="Left Align">
     	    <span class="glyphicon glyphicon-th-large" aria-hidden="true"></span>
         </button>
     </div>
@@ -52,3 +52,5 @@
         </table>
     </div>
 </forn>
+
+<script><%block name="js"><%include file="../.js-cache/events_table.min.js"/></%block></script>
