@@ -29,6 +29,22 @@
     </head>
     <%block name="var"/>
     <body>
+	<script>
+    	    window.fbAsyncInit = function() {
+            FB.init({
+        	appId      : '1391099707867458',
+                xfbml      : true,
+                version    : 'v2.2'
+            });
+            };
+            (function(d, s, id){
+        	var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id)) {return;}
+                js = d.createElement(s); js.id = id;
+                js.src = "//connect.facebook.net/en_US/sdk.js";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
 	<div class="container">
 	    <header class="header">
 		<%include file="nav.html" args="active='index'"/>
@@ -42,6 +58,7 @@
 		    <a target="_blank" href="http://instagram.com/kipod.banegev">Instagram</a> | 
 		    <a target="_blank" href="https://www.youtube.com/channel/UCsTZ53FmVtQ2pmkA_ULqN5Q">Youtube</a> | 
 		    <a target="_blank" href="https://www.google.com/calendar/embed?src=9fen91g1r5h5ijsegn6jl2bkr0%40group.calendar.google.com&ctz=Asia/Jerusalem">יומן הקיפו"ד</a> |
+		    <a target="_blank" href="https://twitter.com/KipodBaNegev">Twitter</a> |
 		    <a target="_blank" href="https://github.com/kipodbanegev/hedgehog">קוד הקיפו"ד</a>
 		</p>
             </footer>

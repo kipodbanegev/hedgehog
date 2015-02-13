@@ -159,8 +159,8 @@ def event(id):
 def search_events_by_date(year, month, day):
     s = datetime(int(year), int(month), int(day), 0, 0)
     e = datetime(int(year), int(month), int(day), 23, 59)
-    e = events.Event.query.filter(events.Event.date.between(s, e))
-    return render_template('search.min.html', active='search', events=e)
+    ev = events.Event.query.filter(events.Event.date.between(s, e))
+    return render_template('search.min.html', active='search', events=ev)
 
 # search events view
 @app.route("/search/events/place/<place>")
