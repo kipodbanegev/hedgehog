@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
     confirmed_at = db.Column(db.DateTime())
     roles = db.relationship('Role', secondary=roles_users,
         backref=db.backref('users', lazy='dynamic'))
+    events = db.relationship("Event", backref="User")
 
 # Flask-Security
 user_datastore = SQLAlchemyUserDatastore(db, User, Role)

@@ -57,5 +57,7 @@ target/
 .sass-cache
 .js-cache
 
+# Backup
+*.~
 # site Config
 site.cfg

@@ -1,0 +1,13 @@
+## -*- coding: utf-8 -*-
+## event.html
+
+<%inherit file="../base.html"/>
+
+<%block name="var">{% set active_page = "event" %}</%block>
+<%block name="js"><%include file="../.js-cache/event.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/event/event.css"/></%block>
+
+<h1>{{ place.name }}</h1>
+{% if place.description is not none %}
+    <h2>{{ place.description }}</h2>
+{% endif %}

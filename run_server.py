@@ -154,6 +154,13 @@ def event(id):
     e = events.Event.query.filter_by(id=id).first()
     return render_template('event.min.html', active='event', event=e)
 
+# place view
+@app.route("/place/<name>")
+def place(name):
+    p = events.Place.query.filter_by(name=name).first()
+    return render_template('place.min.html', active='search', place=p)
+
+
 # search events view
 @app.route("/search/events/date/<year>/<month>/<day>/")
 def search_events_by_date(year, month, day):
@@ -165,7 +172,11 @@ def search_events_by_date(year, month, day):
 # search events view
 @app.route("/search/events/place/<place>")
 def search_events_by_place(place):
-    e = events.Event.query.filter_by(place=place)
+    #e = events.Place.query.filter_by(name=place).all()
+    #if e is not None:
+	#e=e.Events
+    #e = events.Event.query.filter_by(name=place)
+    e = events.Event.query.filter(events.Event.place.any(events.Place.name == place))
     return render_template('search.min.html', active='search', events=e)
 
 
@@ -186,7 +197,7 @@ def submit_event():
 	#e.place   = request.form['event_place']
 	#e.datestr    = request.form['event_date']
 	#e.date    = datetime.strptime(request.form['event_date'], '%d/%m/%Y %H:%M')
-	return '<html><body>thank you! <strong style="color:red;">' + str(name) + '</strong> had been added and waiting for approval. click <a href="/">here</a> to return to the kipod site.</body></html>'
+	return '<html><body>thank you! <strong style="color:red;">' + name + '</strong> had been added and waiting for approval. click <a href="/">here</a> to return to the kipod site.</body></html>'
 
 @app.errorhandler(404)
 def page_not_found(error):

@@ -33,6 +33,7 @@ process('404')
 process('login')
 process('admin')
 process('event')
+process('place')
 
 EOF
 
