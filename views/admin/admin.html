@@ -28,3 +28,13 @@
     </li>
     {% endfor %}
 </ul>
+
+<h2>מקומות</h2>
+
+<ul>
+    {% for p in places %}
+    <li>
+	<a href="/place/{{p.name}}">{{ p.name }}</a>
+    </li>
+    {% endfor %}
+</ul>

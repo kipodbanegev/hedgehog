@@ -64,10 +64,14 @@ def home():
 # admin view
 @app.route("/admin")
 def admin_home():
-    u = users.User.query.filter_by()
-    e = events.Event.query.filter_by()
-    return render_template('admin.min.html', active='home', users=u, events=e)
-
+    if current_user.has_role("admin"):
+	u = users.User.query.filter_by()
+	e = events.Event.query.filter_by()
+	p = events.Place.query.filter_by()
+	return render_template('admin.min.html', active='home', users=u, events=e, places=p)
+    else:
+	abort(403)
+	#return redirect(url_for('home'))
 
 # About view
 @app.route("/about")
@@ -202,6 +206,10 @@ def submit_event():
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('404.min.html')
+
+@app.errorhandler(403)
+def page_forbidden(error):
+    return render_template('403.min.html')
 
 # main
 if __name__ == "__main__":
