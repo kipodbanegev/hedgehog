@@ -35,6 +35,7 @@ process('login')
 process('admin')
 process('event')
 process('place')
+process('place-edit')
 
 EOF
 

@@ -1,13 +1,23 @@
 ## -*- coding: utf-8 -*-
-## event.html
+## place.html
 
 <%inherit file="../base.html"/>
 
-<%block name="var">{% set active_page = "event" %}</%block>
-<%block name="js"><%include file="../.js-cache/event.min.js"/></%block>
-<%block name="css"><%include file="../.sass-cache/event/event.css"/></%block>
+<%block name="var">{% set active_page = "place" %}</%block>
+<%block name="js"><%include file="../.js-cache/place.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/place/place.css"/></%block>
 
+{% if current_user.has_role('admin') %}
+    <h1 style="display:inline-block;">{{ place.name }}</h1>
+    <div class="edit-btn-wrapper"><a href="edit">עריכה</a></div>
+{% else %}
 <h1>{{ place.name }}</h1>
+{% endif %}
 {% if place.description is not none %}
     <h2>{{ place.description }}</h2>
 {% endif %}
+
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d218833.28758552065!2d35.09576004999998!3d31.01872300000002!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x150246012ca6fe53%3A0x96ba70a020a712d1!2z15PXmdee15XXoNeU!5e0!3m2!1siw!2sil!4v1423933873305" width="600" height="450" frameborder="0" style="border:0"></iframe>
+
+<br/><br/><div class="fb-like" data-href="{{ request.url }}" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div><br/><br/>
+<div class="fb-comments" data-href="{{ request.url }}" data-numposts="10" data-colorscheme="light"></div>

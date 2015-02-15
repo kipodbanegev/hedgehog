@@ -20,10 +20,13 @@ dbuser = config.get('Database', 'user', 0)
 dbpass = config.get('Database', 'password', 0)
 dbname = config.get('Database', 'dbname', 0)
 secret_key = config.get('Session', 'secret_key', '')
+hash = config.get('Session', 'hash', '')
 
 # set secret key for session
 if secret_key=='':
     sys.exit("Empty secrey_key in site.cfg")
+if hash=='':
+    sys.exit("Empty hash in site.cfg")
 # directly into flask-login
 #app.secret_key = secret_key
 # through flask-security
@@ -40,7 +43,8 @@ app.config['SECURITY_MSG_INVALID_PASSWORD'] = (u"כתובת דואר אלקטר�
 import model
 model.app = app
 model.init()
-from model import events, users
+model.inithash(hash)
+from model import decodehash, events, users
 model.create_db()
 users.init(app)
 
@@ -52,26 +56,24 @@ from flask.ext.security import Security, current_user, login_required
 
 # Flask-WTF
 from flask_wtf import Form
-from wtforms import TextField, PasswordField, validators
-from wtforms.validators import Required
+from wtforms import TextField, StringField, PasswordField, validators
+from wtforms.validators import Required, DataRequired
 
 # home view
 @app.route("/")
 def home():
-    e = events.Event.query.filter_by()
+    e = events.Event.query.filter_by().order_by(events.Event.date)
     return render_template('index.min.html', active='home', events=e)
 
 # admin view
-@app.route("/admin")
+@app.route("/admin/")
 def admin_home():
-    if current_user.has_role("admin"):
-	u = users.User.query.filter_by()
-	e = events.Event.query.filter_by()
-	p = events.Place.query.filter_by()
-	return render_template('admin.min.html', active='home', users=u, events=e, places=p)
-    else:
+    if not current_user.has_role("admin"):
 	abort(403)
-	#return redirect(url_for('home'))
+    u = users.User.query.filter_by()
+    e = events.Event.query.filter_by()
+    p = events.Place.query.filter_by()
+    return render_template('admin.min.html', active='home', users=u, events=e, places=p)
 
 # About view
 @app.route("/about")
@@ -152,18 +154,62 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+# event view (missing seoname) just redirect
+@app.route("/event/<id>/")
+def event_missing_seoname(id):
+    e = events.Event.query.filter_by(id=decodehash(id)).first()
+    return redirect(e.url())
+
 # event view
-@app.route("/event/<id>")
-def event(id):
+@app.route("/event/<id>/<seoname>/")
+def event(id, seoname):
+    id = decodehash(id)
+    if not id:
+	abort(404)
     e = events.Event.query.filter_by(id=id).first()
+    if e is None:
+	abort(404)
+    if e.seoname() != seoname:
+	return redirect(e.url())
     return render_template('event.min.html', active='event', event=e)
 
 # place view
-@app.route("/place/<name>")
-def place(name):
-    p = events.Place.query.filter_by(name=name).first()
+@app.route("/place/<id>/<seoname>/")
+def place(id, seoname):
+    id = decodehash(id)
+    if not id:
+	abort(404)
+    p = events.Place.query.filter_by(id=id).first()
+    if p is None:
+	abort(404)
+    if p.seoname != seoname:
+	return redirect(p.url())
     return render_template('place.min.html', active='search', place=p)
 
+
+class EventForm(Form):
+    name = StringField('name', validators=[DataRequired()])
+    seoname = StringField('seoname', validators=[DataRequired()])
+
+# place edit view
+@app.route("/place/<id>/<seoname>/edit", methods=['GET', 'POST'])
+def place_edit(id, seoname):
+    if not current_user.has_role("admin"):
+	abort(403)
+    id = decodehash(id)
+    if not id:
+	abort(404)
+    p = events.Place.query.filter_by(id=id).first()
+    if p is None:
+	abort(404)
+    if p.seoname != seoname:
+	return redirect(p.url())
+    form = EventForm(obj=p)
+    if form.validate_on_submit():
+        form.populate_obj(p)
+        p.save()
+        return redirect(p.url())
+    return render_template('place-edit.min.html', active='place edit', place=p, form=form)
 
 # search events view
 @app.route("/search/events/date/<year>/<month>/<day>/")
@@ -174,15 +220,10 @@ def search_events_by_date(year, month, day):
     return render_template('search.min.html', active='search', events=ev)
 
 # search events view
-@app.route("/search/events/place/<place>")
+@app.route("/search/events/place/<place>/")
 def search_events_by_place(place):
-    #e = events.Place.query.filter_by(name=place).all()
-    #if e is not None:
-	#e=e.Events
-    #e = events.Event.query.filter_by(name=place)
-    e = events.Event.query.filter(events.Event.place.any(events.Place.name == place))
+    e = events.Event.query.filter(events.Event.place.any(events.Place.seoname == place))
     return render_template('search.min.html', active='search', events=e)
-
 
 # Submit event view
 #@users.login_manager.user_loader
@@ -197,7 +238,8 @@ def submit_event():
 	description = request.form['event_description']
 	place = request.form['event_place']
 	date = request.form['event_date']
-	events.insert(name, description, place, date)
+	e = events.insert(name, description, place, date)
+	return redirect(e.url())
 	#e.place   = request.form['event_place']
 	#e.datestr    = request.form['event_date']
 	#e.date    = datetime.strptime(request.form['event_date'], '%d/%m/%Y %H:%M')

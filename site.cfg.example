@@ -9,3 +9,5 @@ secret_key='why would I tell you my secret key?'
 # best to generate using:
 # import os
 # os.urandom(24)
+# never change salt after db is filling. all id's will be change, and shared urls will be broken for places and events
+hash='this is my salt 1'

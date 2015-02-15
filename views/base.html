@@ -22,6 +22,8 @@
         <link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.3/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
         ##<link href="" rel="stylesheet">
 
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
 	<%block name="meta"/>
 	<style><%include file=".sass-cache/base.css"/><%block name="css"/></style>
 	## JQuery
@@ -29,22 +31,7 @@
     </head>
     <%block name="var"/>
     <body>
-	<script>
-    	    window.fbAsyncInit = function() {
-            FB.init({
-        	appId      : '1391099707867458',
-                xfbml      : true,
-                version    : 'v2.2'
-            });
-            };
-            (function(d, s, id){
-        	var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) {return;}
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
-        </script>
+	<%include file="fb-sdk.html"/>
 	<div class="container">
 	    <header class="header">
 		<%include file="nav.html" args="active='index'"/>

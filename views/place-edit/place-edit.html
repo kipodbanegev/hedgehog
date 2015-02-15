@@ -1,0 +1,54 @@
+## -*- coding: utf-8 -*-
+## event.html
+
+<%inherit file="../base.html"/>
+
+<%block name="var">{% set active_page = "event" %}</%block>
+<%block name="js"><%include file="../.js-cache/event.min.js"/></%block>
+<%block name="css"><%include file="../.sass-cache/event/event.css"/></%block>
+
+## Text input
+<%def name="textinput(label, id, name, placeholder, help='', more='', value='')">
+    <div class="form-group">
+        <label class="col-md-4 control-label" for="textinput">${label}</label>
+        <div class="col-md-4">
+	    <input id="${id}" name="${name}" type="text" placeholder="${placeholder}" class="form-control input-md" value="${value}" ${more}>
+	    <span class="help-block">${help}</span>
+	</div>
+    </div>
+</%def>
+
+<h1>עריכת מקום: {{ place.name }}</h1>
+
+<div class="container">
+    <form id="eventForm" class="form-horizontal" method="post">
+	{{ form.hidden_tag() }}
+	<fieldset>
+	    <legend>טופס עריכת מקום</legend>
+	    {# place name #}
+	    ${textinput(
+		label=u'שם המקום',
+		id='{{ form.name.id }}',
+		name='{{ form.name.name }}',
+		placeholder=u'שם המקום',
+		value='{{ form.name.data }}',
+		more='autofocus'
+	    )}
+	    {# place name #}
+	    ${textinput(
+		label=u'שם SEO',
+		id='{{ form.seoname.id }}',
+		name='{{ form.seoname.name }}',
+		placeholder=u'שם SEO',
+		value='{{ form.seoname.data }}',
+		more='autofocus'
+	    )}
+	    <input type="submit" value="עדכון">
+	</fieldset>
+    </form>
+</div>
+
+{% if place.description is not none %}
+    <h2>{{ place.description }}</h2>
+{% endif %}
+

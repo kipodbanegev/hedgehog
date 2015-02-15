@@ -2,32 +2,36 @@
 <%page args="active='index'"/>
 
 {% set navigation_bar = [
-    ('/', 'index', 'דף הבית'),
-    ('/event/submit/', 'submit_event', 'הוספת אירוע'),
+    ('/', 'index', 'דף הבית', 'home'),
+    ('/event/submit/', 'submit_event', 'הוספת אירוע', 'plus'),
 ] -%}
 <nav>
     <ul class="nav nav-pills pull-right">
-    {% for href, id, caption in navigation_bar %}
+    {% for href, id, caption, icon in navigation_bar %}
 	{% if id == active_page %}
-	    <li class="active"><a href="{{ href|e }}">{{ caption|e }}</a></li>
+	    <li class="active"><a href="{{ href|e }}"><i class="fa fa-{{ icon|e }}"></i> {{ caption|e }}</a></li>
 	{% else %}
-	    <li><a href="{{ href|e }}">{{ caption|e }}</a></li>
+	    <li><a href="{{ href|e }}"><i class="fa fa-{{ icon|e }}"></i> {{ caption|e }}</a></li>
 	{% endif %}
     {% endfor %}
-    {% if current_user.has_role('admin') %}
-	<li><a href="/admin">ניהול</a></li>
-    {% endif %}
     {% if current_user.is_authenticated() %}
-	<li><a href="/logout">התנתקות</a></li>
+	<li><a href="/account/events/"><i class="fa fa-calendar"></i> האירועים שלי <span class="badge">4</span></a></li>
+	<li><a href="/logout"><i class="fa fa-sign-out"></i> התנתקות</a></li>
     {% else %}
 	{% if 'login' == active_page %}
 	<li class="active">
 	{% else %}
 	<li>
 	{% endif %}
-	<a href="/login">התחברות</a></li>
+	<a href="/login"><i class="fa fa-sign-in"></i> התחברות</a></li>
     {% endif %}
-
+    {% if current_user.has_role('admin') %}
+	{% if 'admin' == active_page %}
+	<li class="active"><a href="/admin/"><i class="fa fa-cog"></i> ניהול</a></li>
+	{% else %}
+	<li><a href="/admin/"><i class="fa fa-cog"></i> ניהול</a></li>
+	{% endif %}
+    {% endif %}
     </ul>
 </nav>
 <h1 class="text-muted"><a href="/"><img src="/static/img/logo.png"></a></h1>

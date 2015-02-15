@@ -3,38 +3,81 @@
 
 <%inherit file="../base.html"/>
 
-<%block name="var">{% set active_page = "about" %}</%block>
+<%block name="var">{% set active_page = "admin" %}</%block>
 <%block name="js"><%include file="../.js-cache/about.min.js"/></%block>
 <%block name="css"><%include file="../.sass-cache/about/about.css"/></%block>
 
-<h1>ניהול הקיפו"ד</h1>
+<div class="alert alert-warning" role="alert">ישנם <strong>1</strong> מקומות מחכים לאישור</div>
+<div class="alert alert-warning" role="alert">ישנם <strong>3</strong> אירועים מחכים לאישור</div>
 
-<h2>משתמשים</h2>
 
-<ul>
-    {% for user in users %}
-    <li>
-	{{ user.email }}
-    </li>
-    {% endfor %}
-</ul>
-
-<h2>אירועים</h2>
-
-<ul>
-    {% for e in events %}
-    <li>
-	<a href="/event/{{e.id}}">{{ e.name }}</a>
-    </li>
-    {% endfor %}
-</ul>
-
-<h2>מקומות</h2>
-
+<div class="panel panel-default">
+    <div class="panel-body">
+<h2>מחכים לאישור</h2>
+<h3>מקומות</h3>
 <ul>
     {% for p in places %}
     <li>
-	<a href="/place/{{p.name}}">{{ p.name }}</a>
+	<a href="{{ p.url() }}">{{ p.name }}</a> <a href="{{ p.editurl() }}"><i class="fa fa-pencil-square-o" title="עריכה"></i></a> <i class="fa fa-check"></i> <i class="fa fa-times"></i>
     </li>
     {% endfor %}
 </ul>
+<h3>אירועים</h3>
+<ul>
+    {% for e in events %}
+    <li>
+	<a href="{{e.url()}}">{{ e.name }}</a> <a href="{{ e.editurl() }}"><i class="fa fa-pencil-square-o" title="עריכה"></i></a> <i class="fa fa-check"></i> <i class="fa fa-times"></i> <span class="label label-warning">באישור האירוע יאושר גם מקום חדש במערכת</span>
+    </li>
+    {% endfor %}
+</ul>
+
+    </div>
+</div>
+
+<h1>ניהול הקיפו"ד</h1>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+	<h3 class="panel-title">משתמשים</h3>
+    </div>
+    <div class="panel-body">
+<ul>
+    {% for user in users %}
+    <li>
+	{{ user.email }}{% if user.has_role("admin") %} <i class="fa fa-user-plus" title="מנהל"></i>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+	<h3 class="panel-title">אירועים</h3>
+    </div>
+    <div class="panel-body">
+<ul>
+    {% for e in events %}
+    <li>
+	<a href="{{e.url()}}">{{ e.name }}</a> <a href="{{ e.editurl() }}"><i class="fa fa-pencil-square-o" title="עריכה"></i></a> <i class="fa fa-trash"></i>
+    </li>
+    {% endfor %}
+</ul>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+	<h3 class="panel-title">מקומות</h3>
+    </div>
+    <div class="panel-body">
+<ul>
+    {% for p in places %}
+    <li>
+	<a href="{{ p.url() }}">{{ p.name }}</a> <a href="{{ p.editurl() }}"><i class="fa fa-pencil-square-o" title="עריכה"></i></a> <span class="badge" title="מספר אירועים במקום">42</span>
+    </li>
+    {% endfor %}
+</ul>
+    </div>
+</div>
+

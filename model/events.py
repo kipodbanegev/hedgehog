@@ -8,9 +8,21 @@ events_places = db.Table('events_places',
     db.Column('place_id', db.Integer(), db.ForeignKey('place.id')))
 
 class Place(db.Model):
-    id = db.Column(db.Integer(), primary_key=True)
+    id          = db.Column(db.Integer(), primary_key=True)
     name        = db.Column(db.String(80), unique=True, nullable=False)
+    seoname     = db.Column(db.String(255), nullable=False)
     description = db.Column(db.String(255))
+    def hashid(self):
+	return hashids.encode(self.id)
+    def save(self):
+	dbsession = db.session()
+	dbsession.commit()
+    def url(self):
+	return url_for('place', id=self.hashid(), seoname=self.seoname)
+    def editurl(self):
+	return self.url()+'edit'
+    def generate_seoname(self):
+	self.seoname = self.name.replace(' ', '-').replace('"', '')
 
 class Event(db.Model):
     id = db.Column(db.Integer(), primary_key=True)
@@ -20,6 +32,14 @@ class Event(db.Model):
     		    backref=db.backref('Events'))
     date        = db.Column(db.DateTime())
     user_id = db.deferred(db.Column(db.Integer, db.ForeignKey(User.id), nullable=False))
+    def seoname(self):
+	return self.name.replace(' ', '-').replace('"', '')
+    def hashid(self):
+	return hashids.encode(self.id)
+    def url(self):
+	return url_for('event', id=self.hashid(), seoname=self.seoname())
+    def editurl(self):
+	return self.url()+'edit'
 
 def insert(name, description, place, date):
     dbsession = db.session()
@@ -31,11 +51,12 @@ def insert(name, description, place, date):
     if not dbsession.query(db.exists().where(Place.name==place)).scalar():
         # add place
 	place = Place(name=place)
+	place.generate_seoname()
         dbsession.add(place)
         dbsession.commit()
+
     else:
 	place = Place.query.filter_by(name=place).first()
-	#place = dbsession.query(Place).filter(name=place).first()
 
     # add event
     event = Event(
@@ -45,6 +66,7 @@ def insert(name, description, place, date):
 	date=date,
 	user_id = current_user.id
     )
+
     dbsession.add(event)
     dbsession.commit()
-    pass
+    return event

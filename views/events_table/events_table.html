@@ -43,9 +43,9 @@
             <tbody>
             {% for e in events %}
 	    <tr>
-		<td><a href="/search/events/date/{{ e.date.strftime('%Y/%m/%d/') }}">{{ e.date.strftime('%d/%m/%Y') }}</a> {{ e.date.strftime('%H:%M') }}</td>
-		<td><a href="/event/{{e.id}}">{{ e.name }}</a></td>
-		<td><a href="/search/events/place/{{ e.place[0].name }}">{{ e.place[0].name }}</a> (<a href="/place/{{ e.place[0].name }}">פרטים</a>)</td>
+		<td><a href="/search/events/date/{{ e.date.strftime('%Y/%m/%d/') }}">{{ e.date.strftime('%d/%m/%Y') }}</a> {{ e.date.strftime('%H:%M') }} <i class="fa fa-sun-o"></i> <i class="fa fa-moon-o"></i> <span class="label label-info">היום</span> <span class="label label-warning">מתרחש כרגע</span></td>
+		<td><a href="{{ e.url() }}">{{ e.name }}</a> <i class="fa fa-ticket" title="הכניסה בתשלום"></i></td>
+		<td><a href="/search/events/place/{{ e.place[0].seoname }}">{{ e.place[0].name }}</a> (<a href="{{ e.place[0].url() }}">פרטים</a>) <i class="fa fa-wheelchair" title="נגישות לנחים"></i> <i class="fa fa-car" title="חניה במקום"></i></i></td>
 	    </tr>
 	    {% endfor %}
 	    </tbody>
