@@ -59,10 +59,12 @@ from flask_wtf import Form
 from wtforms import TextField, StringField, PasswordField, validators
 from wtforms.validators import Required, DataRequired
 
+from datetime import datetime
+
 # home view
 @app.route("/")
 def home():
-    e = events.Event.query.filter_by().order_by(events.Event.date)
+    e = events.Event.query.filter(events.Event.date>datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)).order_by(events.Event.date)
     return render_template('index.min.html', active='home', events=e)
 
 # admin view

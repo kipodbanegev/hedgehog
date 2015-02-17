@@ -40,6 +40,16 @@ class Event(db.Model):
 	return url_for('event', id=self.hashid(), seoname=self.seoname())
     def editurl(self):
 	return self.url()+'edit'
+    def isday(self):
+	nightstart = datetime.now().replace(hour=18, minute=50, second=0, microsecond=0)
+	return self.date < nightstart
+    def isnight(self):
+	nightstart = datetime.now().replace(hour=18, minute=50, second=0, microsecond=0)
+	return self.date >= nightstart
+    def istoday(self):
+	return self.date.date() == datetime.today().date()
+    def isnow(self):
+	return self.istoday() and self.date <= datetime.now()
 
 def insert(name, description, place, date):
     dbsession = db.session()
