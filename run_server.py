@@ -4,7 +4,7 @@ import os, sys
 from datetime import datetime
 
 # flask
-from flask import Flask, render_template, url_for, request, redirect, abort
+from flask import Flask, render_template, url_for, request, redirect, abort, send_from_directory
 app = Flask(__name__)
 
 # jinja2
@@ -254,6 +254,13 @@ def page_not_found(error):
 @app.errorhandler(403)
 def page_forbidden(error):
     return render_template('403.min.html')
+
+@app.route('/favicon.ico')
+@app.route('/humans.txt')
+@app.route('/robots.txt')
+@app.route('/sitemap.xml')
+def static_from_root():
+    return send_from_directory(app.static_folder, request.path[1:])
 
 # main
 if __name__ == "__main__":
