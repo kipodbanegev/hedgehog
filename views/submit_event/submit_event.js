@@ -6,6 +6,19 @@ var notempty = {
     }
 }
 
+var multichoice = {
+    validators: {
+        callback: {
+            message: 'יש לבחור לפחות אפשרות אחת',
+            callback: function(value, validator, $field) {
+                // Get the selected options
+                var options = validator.getFieldElements('event_type').val();
+                return (options != null && options.length >= 1);
+    	    }
+	}
+    }
+}
+
 var validator = {
     message: 'This value is not valid',
     feedbackIcons: {
@@ -18,6 +31,8 @@ var validator = {
         event_description: notempty,
         event_place: notempty,
         event_date: notempty,
+        event_end_date: notempty,
+        event_type: multichoice,
     }
 }
 
@@ -44,9 +59,9 @@ $(document).ready(function() {
         //e.preventDefault();
         //alert('ok');
     });
-    //$('#event_date').datetimepicker({pickTime: false});
     $('#event_date').datetimepicker({sideBySide: true, format: 'DD/MM/YYYY HH:mm', pick12HourFormat: false, minDate:get_today(),language:'he'});
-    $('#event_time').datetimepicker({pickDate: false});
-    $('#event_time_end').datetimepicker({pickDate: false});
+    $('#event_end_date').datetimepicker({sideBySide: true, format: 'DD/MM/YYYY HH:mm', pick12HourFormat: false, minDate:get_today(),language:'he'});
+    //$('#event_time').datetimepicker({pickDate: false});
+    //$('#event_time_end').datetimepicker({pickDate: false});
     $('[autofocus]:first').focus();
 });

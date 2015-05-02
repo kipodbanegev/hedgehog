@@ -7,6 +7,8 @@
 </%block>
 
 <%block name="end">
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.5/css/bootstrap-select.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.6.5/js/bootstrap-select.min.js"></script>
 </%block>
 
 <%block name="js"><%include file="../.js-cache/submit_event.min.js"/></%block>
@@ -59,26 +61,18 @@
             </div>
         </div>
 
-	{# event start and end -- depreceated as for now
+	{# event end date #}
 	<div class="form-group">
-	    <label class="col-md-4 control-label" for="textinput">שעת התחלה</label>
+	    <label class="col-md-4 control-label" for="textinput">תאריך סיום האירוע</label>
     	    <div class="col-md-4">
-        	<input type='text' class="form-control" id='event_time' name='event_time'/>
+        	<input type='text' class="form-control" id='event_end_date' name='event_end_date'/>
             </div>
         </div>
-
-	<div class="form-group">
-	    <label class="col-md-4 control-label" for="textinput">שעת סיום</label>
-    	    <div class="col-md-4">
-        	<input type='text' class="form-control" id='event_time_end' name='event_time_end'/>
-            </div>
-        </div>
-	#}
 
 	<div class="form-group">
 	    <label class="col-md-4 control-label" for="sel1">סוג האירוע:</label>
 	    <div class="col-md-4">
-		<select class="form-control" id="sel1">
+		<select class="form-control selectpicker" id="event_type" name="event_type" multiple title="בחרו פריט אחד או יותר">
 	    	    <option>הופעות</option>
 	    	    <option>סרטים</option>
 	            <option>הרצאות</option>
