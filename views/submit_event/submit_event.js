@@ -13,6 +13,7 @@ var multichoice = {
             callback: function(value, validator, $field) {
                 // Get the selected options
                 var options = validator.getFieldElements('event_type').val();
+                console.log('callback');
                 return (options != null && options.length >= 1);
     	    }
 	}
@@ -54,11 +55,18 @@ function get_today() {
 }
 
 $(document).ready(function() {
-    $('#eventForm').bootstrapValidator(validator).on('success.form.bv', function(e) {
-	// Prevent form submission
-        //e.preventDefault();
-        //alert('ok');
-    });
+    $('#eventForm')
+	.find('[name="event_type"]')
+	    .selectpicker()
+	    .change(function(e) {
+		$('#eventForm').formValidation('revalidateField', 'colors');
+	    })
+	    .end()
+	.bootstrapValidator(validator).on('success.form.bv', function(e) {
+	    // Prevent form submission
+	    //e.preventDefault();
+            //alert('ok');
+	});
     $('#event_date').datetimepicker({sideBySide: true, format: 'DD/MM/YYYY HH:mm', pick12HourFormat: false, minDate:get_today(),language:'he'});
     $('#event_end_date').datetimepicker({sideBySide: true, format: 'DD/MM/YYYY HH:mm', pick12HourFormat: false, minDate:get_today(),language:'he'});
     //$('#event_time').datetimepicker({pickDate: false});

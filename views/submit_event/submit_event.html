@@ -71,7 +71,7 @@
 
 	<div class="form-group">
 	    <label class="col-md-4 control-label" for="sel1">סוג האירוע:</label>
-	    <div class="col-md-4">
+	    <div class="col-md-4 selectContainer">
 		<select class="form-control selectpicker" id="event_type" name="event_type" multiple title="בחרו פריט אחד או יותר">
 	    	    <option>הופעות</option>
 	    	    <option>סרטים</option>
@@ -82,49 +82,24 @@
 	            <option>פסטיבלים</option>
 	            <option>חיי לילה</option>
 	            <option>תרבות יהודית</option>
-	            <option>התנדבות</option>
+	            <option>מעורבות חברתית</option>
+	    	    <option>אחר</option>
 	        </select>
 	    </div>
 	</div>
 
 	<div class="form-group">
 	    <label class="col-md-4 control-label" for="textinput">מתאים לגילאים</label>
-	    <div class="col-md-4">
-		<div class="checkbox">
-		    <label>
-    			<input type="checkbox" value=""> פעוטות
-    		    </label>
-		</div>
-		<div class="checkbox">
-		    <label>
-    			<input type="checkbox" value=""> ילדים
-    		    </label>
-		</div>
-		<div class="checkbox">
-		    <label>
-    			<input type="checkbox" value=""> נוער
-    		    </label>
-		</div>
-		<div class="checkbox">
-		    <label>
-    			<input type="checkbox" value=""> צעירים
-    		    </label>
-		</div>
-		<div class="checkbox">
-		    <label>
-    			<input type="checkbox" value=""> בוגרים
-    		    </label>
-		</div>
-		<div class="checkbox">
-		    <label>
-    			<input type="checkbox" value=""> גיל הזהב
-    		    </label>
-		</div>
-		<div class="checkbox">
-		    <label>
-    			<input type="checkbox" value=""> לכל המשפחה
-    		    </label>
-		</div>
+	    <div class="col-md-4 selectContainer">
+		<select class="form-control selectpicker" id="event_ages" name="event_ages" multiple title="בחרו פריט אחד או יותר">
+		    <option>פעוטות</option>
+		    <option>ילדים</option>
+		    <option>נוער</option>
+		    <option>צעירים</option>
+		    <option>בוגרים</option>
+		    <option>גיל הזהב</option>
+		    <option>לכל המשפחה</option>
+	        </select>
 	    </div>
 	</div>
 

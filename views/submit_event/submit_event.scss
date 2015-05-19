@@ -5,3 +5,7 @@
 input[type=checkbox] {
     margin-right: -20px!important;
 }
+#bootstrapSelectForm .selectContainer .form-control-feedback {
+    /* Adjust feedback icon position */
+    right: -15px;
+}
